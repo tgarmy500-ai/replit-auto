@@ -1,6 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
 const { COLORS, CRYPTOCURRENCIES } = require('../config');
-const emojiCache = require('../emojiCache');
 
 function mainEmbed() {
   return new EmbedBuilder()
@@ -22,9 +21,9 @@ function currencySelectRow() {
     .setCustomId('select_currency')
     .setPlaceholder('Select The Cryptocurrency')
     .addOptions([
-      { label: 'Litecoin (LTC)', value: 'LTC', emoji: emojiCache.get('LTC'), description: 'Fast and low-fee transactions' },
-      { label: 'Solana (SOL)', value: 'SOL', emoji: emojiCache.get('SOL'), description: 'High-speed blockchain' },
-      { label: 'Tether (USDT)', value: 'USDT', emoji: emojiCache.get('USDT'), description: 'Stable USD-pegged (TRC20)' },
+      { label: 'Litecoin (LTC)', value: 'LTC', emoji: '🥈', description: 'Fast and low-fee transactions' },
+      { label: 'Solana (SOL)', value: 'SOL', emoji: '☀️', description: 'High-speed blockchain' },
+      { label: 'Tether (USDT)', value: 'USDT', emoji: '💲', description: 'Stable USD-pegged (TRC20)' },
     ]);
   return new ActionRowBuilder().addComponents(select);
 }

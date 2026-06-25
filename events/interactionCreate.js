@@ -268,6 +268,16 @@ module.exports = {
         return;
       }
 
+      if (customId === 'start_deal_panel') {
+        const { currencySelectRow, mainEmbed } = require('../utils/embeds');
+        await interaction.reply({
+          embeds: [mainEmbed()],
+          components: [currencySelectRow()],
+          ephemeral: true,
+        });
+        return;
+      }
+
       if (customId === 'confirm_close_all' || customId === 'cancel_close_all') return;
     }
   },

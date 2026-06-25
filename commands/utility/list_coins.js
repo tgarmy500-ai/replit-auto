@@ -16,7 +16,7 @@ module.exports = {
         .setTitle('🪙 Supported Currencies')
         .setColor(COLORS.INFO)
         .addFields(fields)
-        .setFooter({ text: 'SMMuggler Escrow' })
+        .setFooter({ text: 'Smuggler Auto MM' })
         .setTimestamp()
       ],
       ephemeral: true,

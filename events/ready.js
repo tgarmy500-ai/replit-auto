@@ -12,7 +12,7 @@ module.exports = {
     setClient(client);
 
     client.user.setPresence({
-      activities: [{ name: 'smmuggler slots', type: ActivityType.Watching }],
+      activities: [{ name: 'Smuggler Auto MM deals', type: ActivityType.Watching }],
       status: 'online',
     });
 
@@ -22,7 +22,7 @@ module.exports = {
 
     setInterval(() => {
       client.user.setPresence({
-        activities: [{ name: 'smmuggler slots', type: ActivityType.Watching }],
+        activities: [{ name: 'Smuggler Auto MM deals', type: ActivityType.Watching }],
         status: 'online',
       });
     }, 60 * 60 * 1000);

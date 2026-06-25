@@ -29,7 +29,7 @@ module.exports = {
           { name: '🔥 Current Streak', value: `**${stats.streak} days**`, inline: true },
           { name: '📅 Last Deal', value: stats.last_deal_at ? `<t:${stats.last_deal_at}:R>` : 'Never', inline: true },
         )
-        .setFooter({ text: 'SMMuggler Escrow • Statistics' })
+        .setFooter({ text: 'Smuggler Auto MM • Statistics' })
         .setTimestamp()
       ],
     });

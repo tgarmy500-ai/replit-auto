@@ -36,7 +36,8 @@ db.exec(`
     updated_at INTEGER DEFAULT (unixepoch()),
     closed_at INTEGER,
     payment_message_id TEXT,
-    confirm_message_id TEXT
+    confirm_message_id TEXT,
+    swept INTEGER DEFAULT 0
   );
 
   CREATE TABLE IF NOT EXISTS wallets (
@@ -269,5 +270,16 @@ module.exports = {
 
   setWithdrawWallet(currency, address) {
     this.setSetting(`withdraw_wallet_${currency.toUpperCase()}`, address);
+  },
+
+  getAllCompletedUnswept(currency = null) {
+    if (currency) {
+      return db.prepare("SELECT * FROM deals WHERE status = 'completed' AND funds_released = 1 AND (swept IS NULL OR swept = 0) AND currency = ?").all(currency.toUpperCase());
+    }
+    return db.prepare("SELECT * FROM deals WHERE status = 'completed' AND funds_released = 1 AND (swept IS NULL OR swept = 0)").all();
+  },
+
+  markDealSwept(deal_id) {
+    db.prepare("UPDATE deals SET swept = 1, updated_at = unixepoch() WHERE deal_id = ?").run(deal_id);
   },
 };

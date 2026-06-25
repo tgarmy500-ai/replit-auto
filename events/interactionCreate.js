@@ -124,7 +124,7 @@ module.exports = {
           { name: '📦 Item', value: itemName, inline: true },
           { name: '🆔 Deal ID', value: dealId, inline: true },
         )
-        .setFooter({ text: 'SMMuggler Escrow • Both parties must confirm' })
+        .setFooter({ text: 'Smuggler Auto MM • Both parties must confirm' })
         .setTimestamp();
 
       await channel.send({

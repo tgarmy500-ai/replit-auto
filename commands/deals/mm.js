@@ -10,7 +10,7 @@ module.exports = {
     await interaction.reply({
       embeds: [mainEmbed()],
       components: [currencySelectRow()],
-      ephemeral: false,
+      ephemeral: true,
     });
   },
 };

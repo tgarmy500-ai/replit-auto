@@ -3,16 +3,17 @@ const { COLORS, CRYPTOCURRENCIES } = require('../config');
 
 function mainEmbed() {
   return new EmbedBuilder()
-    .setTitle('💎 SMMuggler MM & Escrow')
+    .setTitle('💎 Smuggler Auto MM')
     .setDescription(
-      '**SMMuggler Escrow** makes your cryptocurrency trades safe and easy.\nWe provide a secure environment for peer-to-peer deals, protecting you from fraud and scams.\n\n' +
-      '## How this works?\n' +
-      'Our automated system handles everything. Funds are only released when both parties are satisfied, ensuring a fair and reliable experience for every user.\n\n' +
-      'Select an asset below to start your deal.\n\n' +
-      '~ **SMMuggler MM & Escrow**'
+      '**Smuggler Auto MM** is your trusted middleman service for secure, peer-to-peer cryptocurrency transactions. ' +
+      'We act as a neutral third party — holding funds in escrow until both sides confirm everything is complete.\n\n' +
+      '## How It Works\n' +
+      'Our automated system oversees every step of the deal. Funds are only released upon buyer confirmation, ensuring full protection against fraud and disputes for every party involved.\n\n' +
+      'Select an asset below to initiate a deal.\n\n' +
+      '~ **Smuggler Auto MM**'
     )
     .setColor(COLORS.PRIMARY)
-    .setFooter({ text: 'SMMuggler Escrow • Secure P2P Trading' })
+    .setFooter({ text: 'Smuggler Auto MM • Secure P2P Trading' })
     .setTimestamp();
 }
 
@@ -85,7 +86,7 @@ function paymentEmbed(deal, address) {
       { name: '⏰ Expires', value: `<t:${Math.floor(Date.now() / 1000) + 172800}:R>`, inline: true },
       { name: '⚠️ Important', value: '• Send the **exact** amount\n• Only send **' + deal.currency + '**\n• Do NOT close this channel\n• Payment monitoring is active' },
     )
-    .setFooter({ text: 'SMMuggler Escrow • Payment Monitor Active 🟢' })
+    .setFooter({ text: 'Smuggler Auto MM • Payment Monitor Active 🟢' })
     .setTimestamp();
 }
 
@@ -131,7 +132,7 @@ function paymentReceivedEmbed(deal, txHash) {
 
 function helpEmbed() {
   return new EmbedBuilder()
-    .setTitle('📚 SMMuggler Bot — Help Center')
+    .setTitle('📚 Smuggler Auto MM — Help Center')
     .setColor(COLORS.PRIMARY)
     .setDescription('All available commands and how to use them:')
     .addFields(
@@ -142,7 +143,7 @@ function helpEmbed() {
       { name: '🔧 Utility Commands', value: '`/ping` — Bot health check\n`/help` — This help menu\n`/search` — Search address or transaction\n`/transcript` — Export channel transcript' },
       { name: '👑 Admin Commands', value: '`/force_cancel` — Force cancel deal\n`/force_release` — Force release funds\n`/send_funds` — Send from deal wallet\n`/blacklist user/address` — Manage blacklist\n`/change-buyer` / `/change-seller` — Swap parties\n`/mod_lock` / `/mod_unlock` — Lock/unlock deal buttons\n`/close_all` — Delete all deal channels\n`/admin_rescan` — Restart payment scan\n`/recover` — Recover deleted channel\n`/create_stats_channels` — Create stats VCs\n`/restart` — Restart the bot' },
     )
-    .setFooter({ text: 'SMMuggler Escrow • Secure P2P Trading' })
+    .setFooter({ text: 'Smuggler Auto MM • Secure P2P Trading' })
     .setTimestamp();
 }
 

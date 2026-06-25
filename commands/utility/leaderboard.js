@@ -22,7 +22,7 @@ module.exports = {
         .setTitle('🏆 Leaderboard — Top Traders')
         .setColor(COLORS.GOLD)
         .setDescription(lines.length ? lines.join('\n') : 'No deals completed yet.')
-        .setFooter({ text: 'SMMuggler Escrow • Leaderboard' })
+        .setFooter({ text: 'Smuggler Auto MM • Leaderboard' })
         .setTimestamp()
       ],
     });

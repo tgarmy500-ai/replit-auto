@@ -11,6 +11,8 @@ const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 
+try { db.exec('ALTER TABLE deals ADD COLUMN fee_usd REAL DEFAULT 0'); } catch {} 
+
 db.exec(`
   CREATE TABLE IF NOT EXISTS deals (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +39,8 @@ db.exec(`
     closed_at INTEGER,
     payment_message_id TEXT,
     confirm_message_id TEXT,
-    swept INTEGER DEFAULT 0
+    swept INTEGER DEFAULT 0,
+    fee_usd REAL DEFAULT 0
   );
 
   CREATE TABLE IF NOT EXISTS wallets (

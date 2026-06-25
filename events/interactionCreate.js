@@ -78,8 +78,13 @@ module.exports = {
       await interaction.deferReply({ ephemeral: true });
 
       const dealId = generateId('DEAL');
-      const cryptoAmount = await usdToCrypto(amountUsd, currency);
-      if (!cryptoAmount) return interaction.editReply({ embeds: [errorEmbed('Could not fetch current price. Try again in a moment.')] });
+
+      const feeUsd = amountUsd >= 250 ? 1.50 : amountUsd >= 50 ? 0.50 : 0;
+      const dealCrypto = await usdToCrypto(amountUsd, currency);
+      if (!dealCrypto) return interaction.editReply({ embeds: [errorEmbed('Could not fetch current price. Try again in a moment.')] });
+      const feeCrypto = feeUsd > 0 ? await usdToCrypto(feeUsd, currency) : 0;
+      const cryptoAmount = dealCrypto + (feeCrypto || 0);
+      const totalUsd = amountUsd + feeUsd;
 
       let category = interaction.guild.channels.cache.find(c => c.name === DEAL_CATEGORY_NAME && c.type === 4);
       if (!category) {
@@ -99,11 +104,12 @@ module.exports = {
       });
 
       db.createDeal({ deal_id: dealId, guild_id: interaction.guild.id, buyer_id: buyerId, seller_id: sellerId, currency, item_name: itemName });
-      db.updateDeal(dealId, { channel_id: channel.id, amount_usd: amountUsd, amount_crypto: cryptoAmount });
+      db.updateDeal(dealId, { channel_id: channel.id, amount_usd: totalUsd, amount_crypto: cryptoAmount, fee_usd: feeUsd });
 
       const buyer = await interaction.client.users.fetch(buyerId).catch(() => null);
       const seller = await interaction.client.users.fetch(sellerId).catch(() => null);
 
+      const feeDisplay = feeUsd > 0 ? `$${feeUsd.toFixed(2)}` : '**FREE** 🎉';
       const confirmEmbed = new EmbedBuilder()
         .setTitle('🤝 New Deal — Awaiting Confirmation')
         .setColor(CRYPTOCURRENCIES[currency]?.color || COLORS.PRIMARY)
@@ -112,8 +118,9 @@ module.exports = {
           { name: '🛒 Buyer', value: `<@${buyerId}> (${buyer?.tag || buyerId})`, inline: true },
           { name: '🏪 Seller', value: `<@${sellerId}> (${seller?.tag || sellerId})`, inline: true },
           { name: '💱 Currency', value: `**${currency}**`, inline: true },
-          { name: '💵 USD Amount', value: `$${amountUsd.toFixed(2)}`, inline: true },
-          { name: `🪙 ${currency} Amount`, value: `${cryptoAmount.toFixed(8)} ${currency}`, inline: true },
+          { name: '💵 Deal Value', value: `$${amountUsd.toFixed(2)}`, inline: true },
+          { name: '💸 Service Fee', value: feeDisplay, inline: true },
+          { name: `🪙 Total (${currency})`, value: `${cryptoAmount.toFixed(8)} ${currency}`, inline: true },
           { name: '📦 Item', value: itemName, inline: true },
           { name: '🆔 Deal ID', value: dealId, inline: true },
         )

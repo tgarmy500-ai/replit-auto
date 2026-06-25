@@ -25,7 +25,7 @@ module.exports = {
           { name: '💵 Current Price', value: `**$${price?.toFixed(4) || 'N/A'}**`, inline: true },
           { name: '📊 24h Change', value: `**${changeStr}**`, inline: true },
         )
-        .setFooter({ text: 'Prices via CoinGecko • SMMuggler Escrow' })
+        .setFooter({ text: 'Prices via CoinGecko • Smuggler Auto MM' })
         .setTimestamp()
       ],
     });

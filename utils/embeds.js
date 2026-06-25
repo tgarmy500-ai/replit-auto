@@ -70,14 +70,18 @@ function dealInfoEmbed(deal, buyer, seller) {
 
 function paymentEmbed(deal, address) {
   const coin = CRYPTOCURRENCIES[deal.currency];
+  const feeUsd = deal.fee_usd || 0;
+  const feeText = feeUsd > 0 ? `$${feeUsd.toFixed(2)}` : '**FREE** 🎉';
+  const dealUsd = (deal.amount_usd || 0) - feeUsd;
   return new EmbedBuilder()
     .setTitle('💳 Payment Required')
     .setColor(COLORS.WARNING)
     .setDescription(`Send exactly **${deal.amount_crypto?.toFixed(8)} ${deal.currency}** to the address below.\n\nThe bot will automatically detect your payment.`)
     .addFields(
       { name: '📬 Payment Address', value: `\`\`\`${address}\`\`\`` },
-      { name: '💵 USD Amount', value: `$${deal.amount_usd?.toFixed(2)}`, inline: true },
-      { name: `🪙 Crypto Amount`, value: `${deal.amount_crypto?.toFixed(8)} ${deal.currency}`, inline: true },
+      { name: '💵 Deal Amount', value: `$${dealUsd.toFixed(2)}`, inline: true },
+      { name: '💸 Service Fee', value: feeText, inline: true },
+      { name: `🪙 Total to Send`, value: `${deal.amount_crypto?.toFixed(8)} ${deal.currency}`, inline: true },
       { name: '⏰ Expires', value: `<t:${Math.floor(Date.now() / 1000) + 172800}:R>`, inline: true },
       { name: '⚠️ Important', value: '• Send the **exact** amount\n• Only send **' + deal.currency + '**\n• Do NOT close this channel\n• Payment monitoring is active' },
     )

@@ -13,17 +13,17 @@ module.exports = {
     }
 
     const embed = new EmbedBuilder()
-      .setTitle('💎 SMMuggler MM & Escrow')
+      .setTitle('💎 Smuggler Auto MM')
       .setDescription(
-        '**SMMuggler Escrow** makes your cryptocurrency trades safe and easy.\n' +
-        'We provide a secure environment for peer-to-peer deals, protecting you from fraud and scams.\n\n' +
-        '## How this works?\n' +
-        'Our automated system handles everything. Funds are only released when both parties are satisfied, ensuring a fair and reliable experience for every user.\n\n' +
-        'Click the button below to start your deal.\n\n' +
-        '~ **SMMuggler MM & Escrow**'
+        '**Smuggler Auto MM** is your trusted middleman service for secure, peer-to-peer cryptocurrency transactions. ' +
+        'We act as a neutral third party — holding funds in escrow until both sides confirm everything is complete.\n\n' +
+        '## How It Works\n' +
+        'Our automated system oversees every step of the deal. Funds are only released upon buyer confirmation, ensuring full protection against fraud and disputes for every party involved.\n\n' +
+        'Click the button below to initiate a deal.\n\n' +
+        '~ **Smuggler Auto MM**'
       )
       .setColor(COLORS.PRIMARY)
-      .setFooter({ text: 'SMMuggler Escrow • Secure P2P Trading' });
+      .setFooter({ text: 'Smuggler Auto MM • Secure P2P Trading' });
 
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder()

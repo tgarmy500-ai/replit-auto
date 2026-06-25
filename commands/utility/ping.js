@@ -22,7 +22,7 @@ module.exports = {
           { name: '📊 Status', value: status, inline: true },
           { name: '⏰ Uptime', value: `<t:${Math.floor((Date.now() - interaction.client.uptime) / 1000)}:R>`, inline: true },
         )
-        .setFooter({ text: 'SMMuggler Escrow • Online 24/7' })
+        .setFooter({ text: 'Smuggler Auto MM • Online 24/7' })
         .setTimestamp()
       ],
     });

@@ -42,7 +42,7 @@ module.exports = {
           { name: `🪙 ${coin}`, value: `**${cryptoAmount.toFixed(8)}**`, inline: true },
           { name: '📊 Rate', value: `1 ${coin} = $${price.toFixed(4)}`, inline: true },
         )
-        .setFooter({ text: 'SMMuggler Escrow • Live Rates' })
+        .setFooter({ text: 'Smuggler Auto MM • Live Rates' })
         .setTimestamp()
       ],
     });

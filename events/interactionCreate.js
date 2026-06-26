@@ -179,6 +179,13 @@ module.exports = {
             embeds: [paymentEmbed(updatedDeal, wallet.address)],
           });
           db.updateDeal(dealId, { payment_message_id: payMsg.id });
+
+          await interaction.channel.send(
+            `📋 **Copy Details:**\n` +
+            `**Address:** \`${wallet.address}\`\n` +
+            `**Amount:** \`${updatedDeal.amount_crypto?.toFixed(8)} ${updatedDeal.currency}\``
+          );
+
           startMonitoring(dealId);
         }
         return;

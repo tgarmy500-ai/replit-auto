@@ -3,13 +3,14 @@ const { mainEmbed, currencySelectRow } = require('../../utils/embeds');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('sendmm')
-    .setDescription('Post the deal panel publicly so everyone in the channel can start a deal'),
+    .setName('mm')
+    .setDescription('Start a new escrow deal between a buyer and seller'),
 
   async execute(interaction) {
     await interaction.reply({
       embeds: [mainEmbed()],
       components: [currencySelectRow()],
+      ephemeral: true,
     });
   },
 };

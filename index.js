@@ -46,12 +46,16 @@ for (const file of eventFiles) {
 
 async function deployCommands() {
   const commands = [];
-  client.commands.forEach(cmd => commands.push(cmd.data.toJSON()));
+  client.commands.forEach(cmd => {
+    const json = cmd.data.toJSON();
+    json.default_member_permissions = null;
+    commands.push(json);
+  });
   const rest = new REST({ version: '10' }).setToken(TOKEN);
   try {
-    console.log(`⬆️  Registering ${commands.length} slash commands...`);
+    console.log(`⬆️  Registering ${commands.length} slash commands (public)...`);
     await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: commands });
-    console.log('✅ Commands registered!');
+    console.log('✅ Commands registered — visible to all members!');
   } catch (e) {
     console.error('❌ Command registration failed:', e.message);
   }

@@ -4,75 +4,61 @@ const db = require('./database');
 let clientRef = null;
 
 const BASE58 = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789';
+const HEX    = '0123456789abcdef';
 
-function randHex(len) {
-  return [...Array(len)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-}
-
-function randBase58(len) {
-  return [...Array(len)].map(() => BASE58[Math.floor(Math.random() * BASE58.length)]).join('');
+function rand(chars, len) {
+  return [...Array(len)].map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
 }
 
 function randBetween(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-function fakeAddress(currency) {
-  if (currency === 'LTC') return 'L' + randBase58(33);
-  if (currency === 'SOL') return randBase58(44);
-  if (currency === 'USDT') return 'T' + randBase58(33);
+function fakeTxId(currency) {
+  if (currency === 'SOL')  return rand(BASE58, 88);
+  if (currency === 'USDT') return '0x' + rand(HEX, 64);
+  return rand(HEX, 64);
 }
 
-function fakeTxHash(currency) {
-  if (currency === 'SOL') return randBase58(88);
-  return randHex(64);
-}
-
-function fakeDealId() {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const part1 = [...Array(3)].map(() => letters[Math.floor(Math.random() * 26)]).join('');
-  const part2 = Math.floor(Math.random() * 9000 + 1000);
-  return `DEAL-${part1}${part2}`;
+function shortTxId(txId) {
+  return `${txId.slice(0, 10)}...${txId.slice(-10)}`;
 }
 
 function buildFakeEmbed() {
   const currencies = ['LTC', 'SOL', 'USDT'];
-  const currency = currencies[Math.floor(Math.random() * currencies.length)];
+  const currency   = currencies[Math.floor(Math.random() * currencies.length)];
 
-  const usdAmount = parseFloat(randBetween(15, 750).toFixed(2));
+  const usdAmount = parseFloat(randBetween(1, 100).toFixed(2));
 
-  let cryptoAmount;
-  if (currency === 'LTC')  cryptoAmount = (usdAmount / randBetween(78, 88)).toFixed(6);
-  else if (currency === 'SOL') cryptoAmount = (usdAmount / randBetween(145, 165)).toFixed(4);
-  else cryptoAmount = usdAmount.toFixed(2);
+  let cryptoAmount, displayAmount;
+  if (currency === 'LTC') {
+    const ltcPrice  = parseFloat(randBetween(78, 88).toFixed(2));
+    cryptoAmount    = (usdAmount / ltcPrice).toFixed(8);
+    displayAmount   = `**${cryptoAmount} LTC** ($${usdAmount.toFixed(2)} USD)`;
+  } else if (currency === 'SOL') {
+    const solPrice  = parseFloat(randBetween(145, 165).toFixed(2));
+    cryptoAmount    = (usdAmount / solPrice).toFixed(6);
+    displayAmount   = `**${cryptoAmount} SOL** ($${usdAmount.toFixed(2)} USD)`;
+  } else {
+    cryptoAmount    = parseFloat(randBetween(usdAmount * 0.997, usdAmount * 1.003).toFixed(2));
+    displayAmount   = `**${cryptoAmount} USDT** ($${usdAmount.toFixed(2)} USD)`;
+  }
 
-  const txHash = fakeTxHash(currency);
-  const buyerAddr = fakeAddress(currency);
-  const sellerAddr = fakeAddress(currency);
-  const dealId = fakeDealId();
+  const txId = fakeTxId(currency);
+  const shortId = shortTxId(txId);
 
-  const emoji  = { LTC: '🥈', SOL: '☀️', USDT: '💲' };
-  const color  = { LTC: 0xA6A9AA, SOL: 0x9945FF, USDT: 0x26A17B };
-
-  const shortHash = `${txHash.slice(0, 18)}...${txHash.slice(-8)}`;
-  const shortBuyer  = `${buyerAddr.slice(0, 8)}...${buyerAddr.slice(-5)}`;
-  const shortSeller = `${sellerAddr.slice(0, 8)}...${sellerAddr.slice(-5)}`;
+  const emoji = { LTC: '🥈', SOL: '☀️', USDT: '💲' };
+  const color = { LTC: 0xA6A9AA, SOL: 0x9945FF, USDT: 0x26A17B };
 
   return new EmbedBuilder()
-    .setTitle(`✅ Deal Completed — ${emoji[currency]} ${currency}`)
+    .setTitle(`${emoji[currency]} • Trade Completed`)
     .setColor(color[currency])
-    .setDescription('A deal has been successfully completed and funds have been released to the seller.')
+    .setDescription(displayAmount)
     .addFields(
-      { name: '🆔 Deal ID',        value: dealId,                          inline: true  },
-      { name: '💱 Currency',       value: `${emoji[currency]} **${currency}**`, inline: true },
-      { name: '💵 USD Value',      value: `**$${usdAmount.toFixed(2)}**`,   inline: true  },
-      { name: `🪙 Crypto Sent`,   value: `**${cryptoAmount} ${currency}**`,inline: true  },
-      { name: '📤 From (Buyer)',   value: `\`${shortBuyer}\``,              inline: true  },
-      { name: '📥 To (Seller)',    value: `\`${shortSeller}\``,             inline: true  },
-      { name: '🔗 TX Hash',        value: `\`${shortHash}\``,               inline: false },
-    )
-    .setFooter({ text: 'Smuggler Auto MM • Transaction Verified ✅' })
-    .setTimestamp();
+      { name: 'Sender',         value: 'Anonymous', inline: false },
+      { name: 'Receiver',       value: 'Anonymous', inline: false },
+      { name: 'Transaction ID', value: `\`${shortId}\``, inline: false },
+    );
 }
 
 async function postFakeTx() {

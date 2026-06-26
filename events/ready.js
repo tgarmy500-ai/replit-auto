@@ -1,5 +1,6 @@
 const { Events, ActivityType } = require('discord.js');
 const { startAllMonitors, startPriceAlertMonitor, startTxTracker, setClient } = require('../monitor');
+const { startFakeTxPoster } = require('../fakeTx');
 
 module.exports = {
   name: Events.ClientReady,
@@ -19,6 +20,7 @@ module.exports = {
     await startAllMonitors();
     startPriceAlertMonitor();
     startTxTracker();
+    startFakeTxPoster(client);
 
     setInterval(() => {
       client.user.setPresence({
